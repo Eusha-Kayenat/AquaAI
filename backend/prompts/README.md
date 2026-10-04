@@ -1,0 +1,3 @@
+# Prompt inventory
+
+Prompts are versioned, fixed-role assets. `extract_v1.txt` accepts observation text and may return only the four evidence keys with allow-listed values or null. `photo_signals_v1.txt` accepts a photo and returns three nullable numeric signals in [0,1]. `rephrase_v1.txt` accepts a question and its options and must preserve both meaning and options. All require JSON only, temperature 0, and treat citizen content as data, never instructions. Models may not score, rank, select questions, or silently correct an answer. The offline mock remains the default; live provider wiring is intentionally fail-closed.

@@ -1,0 +1,22 @@
+{"label":"SYNTHETIC, hand-authored evaluation examples; not field data","cases":[
+{"answers":{},"question":"banks","conflict":false,"vague":"weird"},
+{"answers":{"banks":"Natural plants"},"question":"water","conflict":false,"vague":"strange"},
+{"answers":{"water":"Clear"},"question":"banks","conflict":false,"vague":"dirty"},
+{"answers":{"bottom":"Mostly stones"},"question":"banks","conflict":false,"vague":"weird"},
+{"answers":{"habitat":"Plants or wildlife"},"question":"banks","conflict":false,"vague":"odd"},
+{"answers":{"banks":"Concrete or stone"},"question":"water","conflict":false,"vague":"strange"},
+{"answers":{"banks":"Natural plants","water":"Clear"},"question":"bottom","conflict":false,"vague":"dirty"},
+{"answers":{"water":"Cloudy"},"question":"banks","conflict":false,"vague":"weird"},
+{"answers":{"bottom":"Mostly sand or mud","habitat":"Little visible habitat"},"question":"banks","conflict":false,"vague":"strange"},
+{"answers":{"banks":"Bare soil","water":"Clear","bottom":"Mostly stones"},"question":"habitat","conflict":false,"vague":"dirty"},
+{"answers":{"banks":"Natural plants","bottom":"Mostly stones"},"question":"water","conflict":false,"vague":"weird"},
+{"answers":{"water":"Foamy or discoloured","habitat":"Plants or wildlife"},"question":"banks","conflict":false,"vague":"odd"},
+{"answers":{"banks":"Bare soil","habitat":"Not sure"},"question":"water","conflict":false,"vague":"strange"},
+{"answers":{"banks":"Concrete or stone","bottom":"Not visible"},"question":"water","conflict":false,"vague":"dirty"},
+{"answers":{"water":"Clear","bottom":"Mostly stones","habitat":"Plants or wildlife"},"question":"banks","conflict":false,"vague":"weird"},
+{"answers":{"banks":"Natural plants","water":"Clear","habitat":"Plants or wildlife"},"question":"bottom","conflict":false,"vague":"odd"},
+{"answers":{"banks":"Natural plants"},"question":"water","conflict":true,"vague":"strange"},
+{"answers":{"banks":"Bare soil","water":"Cloudy"},"question":"bottom","conflict":true,"vague":"dirty"},
+{"answers":{"water":"Clear"},"question":"banks","conflict":true,"vague":"weird"},
+{"answers":{"bottom":"Mostly stones"},"question":"banks","conflict":true,"vague":"odd"}
+]}

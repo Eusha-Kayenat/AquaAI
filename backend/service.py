@@ -27,7 +27,8 @@ class Store:
         if not key: return item
         if key not in FIELDS: raise ValueError(f"Unknown field {key}")
         valid=FIELDS[key]["options"]+["I'm not sure"]
-        is_other=answer.startswith("Other:") or answer.startswith("Others:") or answer.strip()=="Other" or answer.strip()=="Others"
+        ans_low=answer.strip().lower()
+        is_other=ans_low.startswith("other:") or ans_low.startswith("others:") or ans_low in ("other","others")
         if answer not in valid and not is_other: raise ValueError("Invalid answer option")
         item["answers"][key]=answer; item["provenance"][key]={"source":"citizen_answer"}
         item["last_answer"]={"field":key,"answer":answer,"confirm_conflict":confirm_conflict}

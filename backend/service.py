@@ -1,11 +1,44 @@
 """Small service layer with explicit human confirmation and a demo seed."""
-import hashlib, time, uuid
+import hashlib, json, os, sqlite3, time, uuid
+from pathlib import Path
 from .engine import FIELDS, score, next_question, status_for, fhir_observation
 from .validation import plausibility_flags
 from .ai_provider import get_provider, safe_extract
 
+class _ItemCache(dict):
+    def __init__(self, values, on_clear):
+        super().__init__(values)
+        self._on_clear=on_clear
+    def clear(self):
+        super().clear()
+        self._on_clear()
+
 class Store:
-    def __init__(self): self.items={}
+    def __init__(self, db_path=":memory:"):
+        """Store observations as JSON records in SQLite; :memory: remains useful for isolated instances."""
+        self.db_path=str(db_path)
+        if self.db_path != ":memory:":
+            Path(self.db_path).parent.mkdir(parents=True, exist_ok=True)
+        self._db=sqlite3.connect(self.db_path, check_same_thread=False)
+        self._db.execute("PRAGMA journal_mode=WAL")
+        self._db.execute("CREATE TABLE IF NOT EXISTS observations (id TEXT PRIMARY KEY, data TEXT NOT NULL)")
+        self._db.commit()
+        initial={row[0]:json.loads(row[1]) for row in self._db.execute("SELECT id, data FROM observations")}
+        self.items=_ItemCache(initial, self._clear_rows)
+
+    def _clear_rows(self):
+        self._db.execute("DELETE FROM observations")
+        self._db.commit()
+
+    def save(self, item):
+        """Persist a mutated observation."""
+        self._db.execute("INSERT INTO observations(id, data) VALUES (?, ?) ON CONFLICT(id) DO UPDATE SET data=excluded.data",
+                         (item["id"], json.dumps(item, ensure_ascii=False)))
+        self._db.commit()
+        return item
+
+    def clear(self):
+        self.items.clear()
     def create(self,payload):
         item={"id":uuid.uuid4().hex[:10],"text":payload.get("text",""),"site_id":payload.get("site_id","unknown"),"timestamp":payload.get("timestamp",time.time()),"location":payload.get("location"),"recent_rain":payload.get("recent_rain",False),"answers":{},"suggestions":{},"provenance":{},"audit":[],"decision_log":[],"flags":[],"review":"open","confirmed_conflicts":[],"photos":payload.get("photos",[])}
         item["text_hash"]=hashlib.sha256(item["text"].encode()).hexdigest()
@@ -14,7 +47,7 @@ class Store:
         for k,suggestion in item["suggestions"].items(): item["provenance"][k]={"source":"ai_suggestion_unconfirmed","model":suggestion["model"],"prompt_version":suggestion["prompt_version"]}
         item["photo_signals"]=payload.get("photo_signals",{})
         item["flags"]=plausibility_flags(item,self.items.values())
-        self.recompute(item); self.items[item["id"]]=item; return item
+        self.recompute(item); self.items[item["id"]]=item; self.save(item); return item
     def recompute(self,item):
         item["score"],item["breakdown"]=score(item["answers"],item.get("photo_signals"),item.get("confirmed_conflicts"))
         decision=next_question(item["answers"],item.get("photo_signals"),item.get("confirmed_conflicts"))
@@ -38,24 +71,26 @@ class Store:
         if confirm_conflict and item["breakdown"][key]["state"]=="conflict":
             if key not in item["confirmed_conflicts"]: item["confirmed_conflicts"].append(key)
             self.recompute(item); item["status"]="Expert review"
-        return item
+        return self.save(item)
     def confirm_suggestion(self,oid,key,value=None,action="confirm"):
         item=self.items[oid]; s=item["suggestions"].get(key)
         if not s: raise ValueError("No suggestion for this field")
         if action=="confirm": val=value or s["value"]
-        elif action=="remove": item["suggestions"].pop(key); return item
+        elif action=="remove": item["suggestions"].pop(key); return self.save(item)
         else: val=value
         if val not in FIELDS[key]["options"]: raise ValueError("Invalid value")
         item["answers"][key]=val; item["provenance"][key]={"source":"ai_suggestion_confirmed","model":"simulated","prompt_version":"extract_v1"}; s["confirmed"]=True
-        return self.recompute(item) or item
+        self.recompute(item)
+        return self.save(item)
     def seed(self):
         samples=[("Banks are concrete beside clear water.",{"banks":"Natural plants"}, {"banks":"Concrete or stone"}),("The water is cloudy after rain; banks are natural plants.",{"banks":"Natural plants"},{}),("Mostly stones on the bottom and plants nearby.",{"banks":"Natural plants","water":"Clear"}, {})]
         result=[]
         for text,answers,signals in samples:
-            x=self.create({"text":text,"site_id":"greenway","location":{"lat":23.78,"lng":90.41},"photo_signals":signals,"ai_mode":"off"}); x["answers"].update(answers); self.recompute(x); x["demo_data"]=True; result.append(x)
+            x=self.create({"text":text,"site_id":"greenway","location":{"lat":23.78,"lng":90.41},"photo_signals":signals,"ai_mode":"off"}); x["answers"].update(answers); self.recompute(x); x["demo_data"]=True; self.save(x); result.append(x)
         return result
     def list(self): return list(self.items.values())
     def queue(self): return sorted([x for x in self.items.values() if x["review"]!="verified" and (x["status"]=="Expert review" or x["review"]=="more_info")],key=lambda x:(x["status"]!="Expert review",x["score"]))
     def fhir(self,oid): return fhir_observation(self.items[oid])
 
-store=Store()
+_default_db=os.environ.get("AQUAAI_DB_PATH", str(Path(__file__).resolve().parent.parent/"data"/"aquaai.sqlite3"))
+store=Store(_default_db)

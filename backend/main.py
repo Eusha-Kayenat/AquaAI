@@ -46,7 +46,7 @@ def confirm_conflict(oid:str):
     if item["breakdown"][key]["state"]!="conflict": raise HTTPException(422,"There is no unresolved photo conflict")
     item["confirmed_conflicts"].append(key); store.recompute(item); item["status"]="Expert review"; item["last_answer"]["confirm_conflict"]=True
     item["audit"].append({"action":"citizen_reconfirmed_conflict","field":key})
-    return item
+    return store.save(item)
 @app.get("/api/review-queue")
 def queue(): return store.queue()
 @app.get("/api/observations/{oid}/fhir")
@@ -58,4 +58,4 @@ def seed(): return store.seed()
 def review(oid:str,action:str):
     item=get_item(oid)
     if action not in {"verified","more-info"}: raise HTTPException(422,"Action must be verified or more-info")
-    item["review"]="verified" if action=="verified" else "more_info"; item["audit"].append({"action":action,"who":"researcher demo","when":__import__('time').time()}); return item
+    item["review"]="verified" if action=="verified" else "more_info"; item["audit"].append({"action":action,"who":"researcher demo","when":__import__('time').time()}); return store.save(item)

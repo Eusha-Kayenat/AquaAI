@@ -17,6 +17,10 @@ class Answer(BaseModel): answer:str; confirm_conflict:bool=False; field:str|None
 class Confirm(BaseModel): action:str="confirm"; value:str|None=None
 @app.get("/")
 def home(): return FileResponse(ROOT/"frontend"/"index.html")
+@app.get("/favicon.ico", include_in_schema=False)
+def favicon_ico(): return FileResponse(ROOT/"frontend"/"favicon.ico")
+@app.get("/favicon.png", include_in_schema=False)
+def favicon_png(): return FileResponse(ROOT/"frontend"/"favicon.png")
 @app.get("/api/fields")
 def fields(): return FIELDS
 @app.post("/api/observations",status_code=201)

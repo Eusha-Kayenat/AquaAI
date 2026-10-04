@@ -7,7 +7,7 @@ from .ai_provider import get_provider, safe_extract
 class Store:
     def __init__(self): self.items={}
     def create(self,payload):
-        item={"id":uuid.uuid4().hex[:10],"text":payload.get("text",""),"site_id":payload.get("site_id","unknown"),"timestamp":payload.get("timestamp",time.time()),"location":payload.get("location"),"recent_rain":payload.get("recent_rain",False),"answers":{},"suggestions":{},"provenance":{},"audit":[],"decision_log":[],"flags":[],"review":"open","confirmed_conflicts":[]}
+        item={"id":uuid.uuid4().hex[:10],"text":payload.get("text",""),"site_id":payload.get("site_id","unknown"),"timestamp":payload.get("timestamp",time.time()),"location":payload.get("location"),"recent_rain":payload.get("recent_rain",False),"answers":{},"suggestions":{},"provenance":{},"audit":[],"decision_log":[],"flags":[],"review":"open","confirmed_conflicts":[],"photos":payload.get("photos",[])}
         item["text_hash"]=hashlib.sha256(item["text"].encode()).hexdigest()
         extracted=safe_extract(get_provider(payload.get("ai_mode","simulated")),item["text"])
         item["suggestions"]={k:{"value":v,"source":"Demo: simulated AI suggestion","model":extracted.get("provider","simulated"),"prompt_version":extracted.get("prompt_version"),"confirmed":False} for k,v in extracted["data"].items() if v}
@@ -22,16 +22,21 @@ class Store:
         item["decision_log"].append({"field":decision.field,"gain":decision.gain,"runner_up":decision.runner_up})
         has_conflict=any(v["state"]=="conflict" for v in item["breakdown"].values())
         item["status"]=status_for(item["score"],has_conflict)
-    def answer(self,oid,answer,confirm_conflict=False):
-        item=self.items[oid]; q=item.get("question")
-        if not q: return item
-        key=q["field"]
-        if answer not in q["options"]+["I'm not sure"]: raise ValueError("Invalid answer option")
+    def answer(self,oid,answer,confirm_conflict=False,field=None):
+        item=self.items[oid]; key=field or (item.get("question") and item["question"]["field"])
+        if not key: return item
+        if key not in FIELDS: raise ValueError(f"Unknown field {key}")
+        valid=FIELDS[key]["options"]+["I'm not sure"]
+        is_other=answer.startswith("Other:") or answer.startswith("Others:") or answer.strip()=="Other" or answer.strip()=="Others"
+        if answer not in valid and not is_other: raise ValueError("Invalid answer option")
         item["answers"][key]=answer; item["provenance"][key]={"source":"citizen_answer"}
         item["last_answer"]={"field":key,"answer":answer,"confirm_conflict":confirm_conflict}
+        if key in item["confirmed_conflicts"] and key in item.get("photo_signals",{}) and answer==item["photo_signals"][key]:
+            item["confirmed_conflicts"]=[k for k in item["confirmed_conflicts"] if k!=key]
         self.recompute(item)
         if confirm_conflict and item["breakdown"][key]["state"]=="conflict":
-            item["confirmed_conflicts"].append(key); self.recompute(item); item["status"]="Expert review"
+            if key not in item["confirmed_conflicts"]: item["confirmed_conflicts"].append(key)
+            self.recompute(item); item["status"]="Expert review"
         return item
     def confirm_suggestion(self,oid,key,value=None,action="confirm"):
         item=self.items[oid]; s=item["suggestions"].get(key)

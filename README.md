@@ -13,6 +13,8 @@ python run.py
 
 The app opens at http://127.0.0.1:8000. For unattended start use `python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000`. No API key is required. In this version the default is an offline simulated provider. `live` mode is not a connected model integration yet and falls back to offline behavior.
 
+Observation entries are stored in SQLite at `data/aquaai.sqlite3` and remain available after restarting the app. Set `AQUAAI_DB_PATH` to use a different database file. The app stores each observation record, including its answers, score breakdown, suggestions, provenance, and review audit; the downloadable summary report is assembled from that record when requested. Keep a backup of the SQLite file if you need to preserve records.
+
 ## Test and synthetic evaluation
 
 ```powershell

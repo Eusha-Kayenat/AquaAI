@@ -475,6 +475,10 @@
       cursor: pointer;
     }
     .queueitem:hover { border-color: var(--primary); }
+    .report-list { display: grid; gap: 10px; }
+    .report-list-item { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 13px; border: 1px solid var(--border); border-radius: 12px; }
+    .report-list-item p { margin: 4px 0 0; }
+    @media (max-width: 640px) { .report-list-item { align-items: flex-start; flex-direction: column; } }
     pre {
       white-space: pre-wrap;
       word-break: break-word;
@@ -920,6 +924,11 @@
         <p>Explore the demo queue and inspect the evidence behind each score.</p>
       </div>
       <div class="statgrid" id="stats"></div>
+      <section class="card" style="margin-top:18px">
+        <h3>Saved reports</h3>
+        <p class="muted">Open a stored observation summary, then choose “Save as PDF / Print” to download or print it.</p>
+        <div class="report-list" id="reports"></div>
+      </section>
       <div class="layout" style="margin-top:18px">
         <section class="card">
           <h3>Review queue</h3>
@@ -1629,6 +1638,16 @@
         ['Needs more info', xs.filter(x => x.status === 'Needs more info').length],
         ['Expert review', xs.filter(x => x.status === 'Expert review').length]
       ].map(x => `<div class="stat"><strong>${x[1]}</strong>${x[0]}</div>`).join('');
+
+      $('#reports').innerHTML = xs.slice().sort((a, b) => b.timestamp - a.timestamp).map(x => `
+        <div class="report-list-item">
+          <div>
+            <b>${escapeHtml(x.site_id || 'Unknown site')}</b> · ${escapeHtml(x.status)} · ${x.score}%
+            <p class="muted">#${escapeHtml(x.id)} · ${x.timestamp ? new Date(x.timestamp * 1000).toLocaleString() : 'Date unavailable'}</p>
+          </div>
+          <button type="button" class="btn primary small" onclick="generatePdf('${x.id}')">Open report</button>
+        </div>
+      `).join('') || '<p class="muted">No saved reports yet. Submit an observation or load the demo entries to get started.</p>';
 
       $('#queue').innerHTML = xs.slice().sort((a, b) =>
         (a.status === 'Expert review' ? 0 : 1) - (b.status === 'Expert review' ? 0 : 1) || a.score - b.score

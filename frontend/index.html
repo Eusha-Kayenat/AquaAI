@@ -1,8 +1,3 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0b5c73"><title>AquaAI — Find the Missing Piece</title><style>
-:root{--bg:#F2F9FB;--surface:#FFFFFF;--surface-2:#E8F4F7;--ink:#0F2A36;--ink-muted:#58727D;--primary:#0E8AA6;--primary-dark:#0B5C73;--accent:#34C3A0;--sun:#F4B740;--ready:#2E9D5B;--verify:#E0A526;--needs:#F08A3C;--expert:#E2574C;--border:#D3E5EB;--radius:16px;--shadow:0 6px 24px rgba(11,92,115,.10)}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 5% 0%,#e4f8f5 0,transparent 38%),var(--bg);color:var(--ink);font:16px/1.6 Inter,system-ui,sans-serif}header{background:linear-gradient(110deg,var(--primary-dark),var(--primary));color:white;padding:20px max(calc((100vw - 1120px)/2),22px);display:flex;align-items:center;justify-content:space-between;gap:18px}.brand{display:flex;gap:13px;align-items:center}.logo{width:46px;height:46px;background:#ffffff20;border-radius:15px;display:grid;place-items:center}.brand h1{font-size:23px;line-height:1.1;margin:0}.tagline{font-size:13px;opacity:.86}.tabs{display:flex;gap:8px}.tab{border:1px solid #ffffff70;color:white;background:#ffffff15;border-radius:999px;padding:8px 16px;cursor:pointer;font:inherit}.tab.active{background:white;color:var(--primary-dark)}main{max-width:1120px;margin:38px auto;padding:0 22px 60px}.eyebrow{text-transform:uppercase;letter-spacing:.12em;color:var(--primary);font-weight:700;font-size:12px}.hero{margin:5px 0 24px}.hero h2{font-size:clamp(28px,5vw,42px);line-height:1.12;margin:7px 0}.hero p{margin:5px 0;color:var(--ink-muted)}.layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(260px,.65fr);gap:20px}.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px;margin-bottom:18px}.card h3{margin:0 0 12px;font-size:19px}.muted{color:var(--ink-muted);font-size:14px}.steps{display:flex;gap:8px;margin:18px 0}.step{font-size:12px;color:var(--ink-muted);background:var(--surface-2);padding:6px 11px;border-radius:999px}.step.on{background:#c9f1e7;color:#075c50;font-weight:700}label{display:block;font-weight:650;margin:14px 0 6px}textarea,input{font:inherit;color:var(--ink);border:1px solid var(--border);background:white;border-radius:12px;padding:12px;width:100%;outline:none}textarea:focus,input:focus,button:focus-visible{outline:3px solid #72d6c1;outline-offset:2px}textarea{min-height:116px;resize:vertical}.row{display:flex;gap:12px}.row>*{flex:1}.btn{border:0;border-radius:12px;padding:12px 18px;font:inherit;font-weight:700;cursor:pointer;min-height:48px;transition:transform .15s,background .2s}.btn:hover{transform:translateY(-1px)}.primary{background:var(--primary);color:white}.primary:hover{background:var(--primary-dark)}.secondary{background:var(--surface-2);color:var(--primary-dark)}.small{min-height:38px;padding:7px 12px;font-size:14px}.banner{border-radius:12px;background:#fff7e7;padding:13px 15px;color:#604a14;margin:12px 0;font-size:14px}.banner.good{background:#e9f8ef;color:#24643b}.chips{display:flex;flex-wrap:wrap;gap:9px}.chip{display:flex;gap:8px;align-items:center;border-radius:999px;background:var(--surface-2);padding:7px 12px;font-size:13px}.ai{background:#f1eefe;color:#55429a;font-weight:700}.gauge{display:flex;align-items:center;gap:17px}.ring{--pct:0;width:96px;height:96px;border-radius:50%;background:conic-gradient(var(--primary) calc(var(--pct)*1%),#e3eef1 0);display:grid;place-items:center;transition:background .6s ease-out}.ring:before{content:"";width:76px;height:76px;background:white;border-radius:50%;grid-area:1/1}.ring strong{grid-area:1/1;z-index:1;font-size:22px}.status{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:4px 11px;background:#fff2d8;color:#705211;font-size:13px;font-weight:700}.status.ready{background:#e6f6e9;color:#23683a}.status.expert{background:#fdeae8;color:#9c332c}.footnote{font-size:12px;color:var(--ink-muted);line-height:1.45;margin-top:13px}.option{display:block;width:100%;text-align:left;border:1px solid var(--border);background:white;border-radius:13px;padding:12px 15px;min-height:52px;margin:8px 0;cursor:pointer;font:inherit;color:var(--ink)}.option:hover{border-color:var(--primary);background:#f5fbfc}.option.unsure{color:var(--ink-muted);border-style:dashed;background:transparent;font-weight:400}.askcard{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;margin:18px 0}.askcard .asktitle{font-weight:700;margin:0 0 4px}.askcard .asktext{margin:0 0 10px;color:var(--ink-muted)}.askcard .option{font-weight:700;transition:border-color .15s,background .15s}.askcard .details{margin-top:6px}.details summary{cursor:pointer;font-weight:650;color:var(--primary-dark);padding:8px 0}.table{width:100%;border-collapse:collapse;font-size:13px}.table td,.table th{text-align:left;border-bottom:1px solid var(--border);padding:9px 5px;vertical-align:top}.toast{position:fixed;bottom:20px;right:20px;background:var(--ink);color:white;padding:12px 18px;border-radius:12px;box-shadow:var(--shadow);display:none}#reviewer{display:none}.statgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.stat{background:var(--surface-2);padding:16px;border-radius:14px}.stat strong{display:block;font-size:25px}.queueitem{border:1px solid var(--border);border-radius:12px;padding:13px;margin:9px 0;cursor:pointer}.queueitem:hover{border-color:var(--primary)}pre{white-space:pre-wrap;word-break:break-word;background:#f4f8f9;border-radius:12px;padding:14px;max-height:260px;overflow:auto;font-size:12px}.wave{height:10px;background:radial-gradient(ellipse at 50% -10%,transparent 68%,#d4f2eb 70%);margin:22px -1px 0}@media(max-width:760px){header{padding:16px 18px;align-items:flex-start;flex-direction:column}.layout{grid-template-columns:1fr}.statgrid{grid-template-columns:repeat(2,1fr)}main{margin-top:24px}.card{padding:19px}.tabs{align-self:stretch}.tab{flex:1}.row{flex-direction:column}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}@media(prefers-color-scheme:dark){:root{--bg:#10232b;--surface:#19323c;--surface-2:#24434e;--ink:#eff9fa;--ink-muted:#aac0c6;--border:#31515d;--primary:#32b2c9;--primary-dark:#14758b;--shadow:0 6px 24px #0004}body{background:radial-gradient(ellipse at 5% 0%,#153e42 0,transparent 38%),var(--bg)}textarea,input,.option,pre{background:#17303a;color:var(--ink)}.option:hover{background:#1f3d48;border-color:var(--primary)}.option.unsure{background:transparent}.option.unsure:hover{background:#1f3d4880}.ring:before{background:var(--surface)}.banner{background:#53421d;color:#fff0c2}.banner.good{background:#184b31;color:#d6f9dd}.ai{background:#403765;color:#e0d8ff}}
-</style></head><body><header><div class="brand"><span class="logo" aria-hidden="true"><svg width="31" height="31" viewBox="0 0 32 32" fill="none"><path d="M16 2C13 8 6 14 6 20a10 10 0 0 0 20 0C26 14 19 8 16 2Z" stroke="white" stroke-width="2.2"/><circle cx="19" cy="18" r="4" stroke="white" stroke-width="2"/><path d="m22 21 4 4" stroke="white" stroke-width="2" stroke-linecap="round"/></svg></span><div><h1>AquaAI</h1><div class="tagline">Don't ask everything. Ask what matters.</div></div></div><nav class="tabs"><button class="tab active" id="citizenTab">Citizen</button><button class="tab" id="researchTab">Researcher · demo access</button></nav></header><main><section id="citizen"><div class="hero"><div class="eyebrow">A clearer picture, one step at a time</div><h2>What did you notice<br>by the stream?</h2><p>Share what you saw. We’ll help find the one detail that matters most.</p></div><div class="steps"><span class="step on">1 Observe</span><span class="step">2 Review</span><span class="step">3 Answer</span><span class="step">4 Done</span></div><div class="layout"><div><section class="card" id="startCard"><h3>Your observation</h3><label for="observationText">Tell us what you noticed</label><textarea id="observationText" placeholder="For example: the water looked clear, and both banks had plants."></textarea><div class="row"><div><label for="site">Site name (optional)</label><input id="site" placeholder="e.g. Greenway bend"></div><div><label for="photo">Add a photo (optional)</label><input id="photo" type="file" accept="image/jpeg,image/png,image/webp"></div></div><div class="row"><div><label for="lat">Latitude (optional)</label><input id="lat" inputmode="decimal" placeholder="23.78"></div><div><label for="lng">Longitude</label><input id="lng" inputmode="decimal" placeholder="90.41"></div></div><label><input id="rain" type="checkbox" style="width:auto"> Heavy rain in the last 24 hours?</label><label for="aimode">AI assist</label><select id="aimode" style="font:inherit;padding:10px;border:1px solid var(--border);border-radius:10px"><option value="off" selected>Off · rule-based only</option><option value="simulated">Simulated · demo suggestions</option><option value="live">Live · only if configured</option></select><p class="muted">AI assist is optional. Suggestions stay unconfirmed until you review them.</p><button class="btn primary" id="submit">Review my observation <span aria-hidden="true">→</span></button><button class="btn secondary" id="geo">Use my location</button><button class="btn secondary" id="seed">Try the Greenway Stream demo</button></section><section class="card" id="workCard" hidden><h3>AquaAI is reviewing…</h3><div class="chips" id="checklist"></div></section><section class="card" id="suggestCard" hidden><h3>Did we get this right?</h3><p class="muted">These are suggestions only. Confirm, change, or remove each one.</p><div id="suggestions"></div><button class="btn primary" id="continue">Continue to my result</button><button class="btn secondary" id="skip">Skip suggestions</button></section><section class="card" id="resultCard" hidden></section></div><aside><section class="card"><h3>A human stays in control</h3><p class="muted">AquaAI looks for missing or conflicting details. It never decides what the stream is like, diagnoses pollution, or silently changes what you told us.</p><div class="banner">Evidence completeness describes how much supporting information we have. It is not a verdict about environmental truth.</div><details class="details"><summary>About the AI</summary><p class="muted">The offline demo uses deterministic simulated suggestions, clearly labelled. Optional live providers are currently a safe fallback, not a connected model. AI may suggest or rephrase; the rule-based engine alone scores and selects questions. In live mode, text and photos could be sent to the configured provider. AI is off by default.</p></details><div class="wave"></div></section><section class="card"><h3>Why one question?</h3><p class="muted">A shorter assessment can still capture useful evidence. AquaAI asks for the highest-value missing detail, then stops when it has enough.</p></section></aside></div></section><section id="reviewer"><div class="hero"><div class="eyebrow">Researcher view · demo access</div><h2>Observation review</h2><p>Explore the demo queue and inspect the evidence behind each score.</p></div><div class="statgrid" id="stats"></div><div class="layout" style="margin-top:18px"><section class="card"><h3>Review queue</h3><div id="queue"></div></section><section class="card"><h3>Observation detail</h3><div id="detail" class="muted">Choose an observation to see its detail.</div></section></div></section></main><div class="toast" id="toast" role="status" aria-live="polite"></div><script>
-const $=s=>document.querySelector(s);let current=null;const foot='Based on completeness and consistency of the information provided - not a determination of environmental truth.';async function api(path,opts={}){let r=await fetch('/api'+path,{headers:{'Content-Type':'application/json'},...opts});let d=await r.json();if(!r.ok)throw Error(d.detail||'Something went wrong');return d}function toast(t){let e=$('#toast');e.textContent=t;e.style.display='block';setTimeout(()=>e.style.display='none',3500)}function view(name){$('#citizen').style.display=name==='citizen'?'block':'none';$('#reviewer').style.display=name==='research'?'block':'none';$('#citizenTab').classList.toggle('active',name==='citizen');$('#researchTab').classList.toggle('active',name==='research');if(name==='research')loadResearch()}$('#citizenTab').onclick=()=>view('citizen');$('#researchTab').onclick=()=>view('research');$('#geo').onclick=()=>navigator.geolocation?.getCurrentPosition(p=>{$('#lat').value=p.coords.latitude.toFixed(5);$('#lng').value=p.coords.longitude.toFixed(5)},()=>toast('Could not get location. You can add it manually.'));$('#submit').onclick=async()=>{try{let text=$('#observationText').value;let lat=$('#lat').value,lng=$('#lng').value;current=await api('/observations',{method:'POST',body:JSON.stringify({text,site_id:$('#site').value||'Greenway Stream',location:lat&&lng?{lat:+lat,lng:+lng}:null,recent_rain:$('#rain').checked,ai_mode:$('#aimode').value})});$('#startCard').hidden=true;$('#workCard').hidden=false;$('#checklist').innerHTML=['Photo received','Location checked','Details read','Checks run'].map(x=>`<span class="chip">✓ ${x}</span>`).join('');setTimeout(showSuggestions,650)}catch(e){toast(e.message)}};function showSuggestions(){if(!current)return;$('#workCard').hidden=true;let entries=Object.entries(current.suggestions||{}).filter(([_,s])=>!s.confirmed);if(!entries.length){$('#suggestCard').hidden=true;renderResult();return}$('#suggestions').innerHTML=entries.map(([k,s])=>`<div class="banner"><span class="chip ai">✦ ${s.source}</span><p><b>${k}</b>: ${s.value}</p><p class="muted">Not counted in the score until you confirm it. ${s.model||s.source} · ${s.prompt_version||"offline"}</p><button class="btn secondary small" onclick="confirmOne('${k}','confirm')">Looks right</button> <button class="btn secondary small" onclick="changeOne('${k}')">Change</button> <button class="btn secondary small" onclick="confirmOne('${k}','remove')">Remove</button></div>`).join('');$('#suggestCard').hidden=false}window.confirmOne=async(k,a,v)=>{try{current=await api(`/observations/${current.id}/suggestions/${k}`,{method:'POST',body:JSON.stringify({action:a,value:v})});showSuggestions()}catch(e){toast(e.message)}};window.changeOne=async k=>{let fields=await api('/fields');let o=fields[k].options;let v=prompt('Choose a value:\n'+o.map((x,i)=>`${i+1}. ${x}`).join('\n'));let n=Number(v);if(n>0&&n<=o.length)confirmOne(k,'edit',o[n-1])};$('#continue').onclick=()=>{$('#suggestCard').hidden=true;renderResult()};$('#skip').onclick=()=>{$('#suggestCard').hidden=true;renderResult()};async function renderResult(){if(!current)return;current=await api(`/observations/${current.id}`.replace('/observations/','/observations/')).catch(()=>current);let q=current.question;let b=current.breakdown;$('#resultCard').hidden=false;$('#resultCard').innerHTML=`<div class="eyebrow">Your evidence summary</div><div class="gauge"><div class="ring" style="--pct:${current.score}"><strong>${current.score}%</strong></div><div><h3 style="margin:0 0 8px">Evidence completeness</h3><span class="status ${current.status==='Ready'?'ready':current.status==='Expert review'?'expert':''}">${current.status}</span><p class="footnote">${foot}</p></div></div>${current.flags?.length?`<div class="banner">${current.flags.map(f=>'• '+f.message).join('<br>')}</div>`:''}${current.last_answer?`<div class="banner good">${current.last_answer.confirm_conflict?'Thanks! A researcher will double-check this one.':`Updated: ${current.last_answer.answer}.`}</div>`:''}<details class="details"><summary>Score breakdown</summary><table class="table"><tr><th>Detail</th><th>State</th><th>Source</th><th>Effect</th></tr>${Object.entries(b).map(([k,v])=>`<tr><td>${v.label}</td><td>${v.state}</td><td>${current.provenance?.[k]?.source||(current.suggestions?.[k]?'AI suggestion · not counted':'Not supplied')}</td><td>${v.contribution}/${v.weight}</td></tr>`).join('')}</table></details><details class="details"><summary>How AquaAI decided</summary><p>${q?.why||'No more questions are needed.'}</p>${q?`<p>If answered, completeness could rise from ${current.score}% to about ${(current.score+q.gain).toFixed(1)}%.</p><small>Next field: ${q.field}; gain ${q.gain}. Runner-up: ${(q.runner_up||[]).map(x=>x.field).join(', ')||'none'}.</small>`:''}</details>${q?`<div class="askcard"><p class="asktitle">Find the missing piece</p><p class="asktext">${q.text}</p><div id="opts">${q.options.filter(x=>x!=="I'm not sure").map((x,i)=>`<button class="option ${x==="I'm not sure"?'unsure':''}" onclick="sendAnswer('${x.replaceAll("'","\\'")}')">${x}</button>`).join('')}<button class="option unsure" onclick='sendAnswer("I&#39;m not sure")'>I'm not sure</button></div><details class="details"><summary>Why am I being asked this?</summary><p>${q.why}</p><p>If answered, completeness could rise from ${current.score}% to about ${(current.score+q.gain).toFixed(1)}%.</p></details></div>`:`<div class="banner good">Thank you. We’ve recorded what you shared.</div><button class="btn secondary" onclick="resetForm()">Add another observation</button>`}`};window.sendAnswer=async a=>{let old=current.score;try{current=await api(`/observations/${current.id}/answer`,{method:'POST',body:JSON.stringify({answer:a})});let conflict=Object.values(current.breakdown).some(x=>x.state==='conflict');if(conflict){if(confirm('Your photo looks a bit different from your answer. Please look again. Is your answer still right?'))current=await api(`/observations/${current.id}/confirm-conflict`,{method:'POST'})}renderResult();toast(`Evidence completeness ${old}% → ${current.score}%. ${foot}`)}catch(e){toast(e.message)}};window.resetForm=()=>{current=null;$('#resultCard').hidden=true;$('#startCard').hidden=false;$('#observationText').value=''};$('#seed').onclick=async()=>{try{let xs=await api('/seed',{method:'POST'});current=xs[0];$('#startCard').hidden=true;renderResult();toast('Demo data loaded. Select a citizen in Researcher view.')}catch(e){toast(e.message)}};async function loadResearch(){let xs=await api('/observations');let q=await api('/review-queue');$('#stats').innerHTML=[['All observations',xs.length],['Ready',xs.filter(x=>x.status==='Ready').length],['Needs more info',xs.filter(x=>x.status==='Needs more info').length],['Expert review',xs.filter(x=>x.status==='Expert review').length]].map(x=>`<div class="stat"><strong>${x[1]}</strong>${x[0]}</div>`).join('');$('#queue').innerHTML=xs.slice().sort((a,b)=>(a.status==='Expert review'?0:1)-(b.status==='Expert review'?0:1)||a.score-b.score).map(x=>`<div class="queueitem" onclick="detail('${x.id}')"><b>${x.site_id}</b><br><span class="muted">${x.status} · ${x.id}</span></div>`).join('')||'<p class="muted">No observations yet.</p>'}window.detail=async id=>{let xs=await api('/observations');let x=xs.find(y=>y.id===id);$('#detail').innerHTML=`<b>${x.site_id}</b> · ${x.status} · ${x.score}%<p class="footnote">${foot}</p><p>${x.text||'(No text supplied)'}</p><h4>Question selected</h4><p>${x.question?.text||'No further question'}</p><p>${x.question?.why||''}</p><h4>Evidence and provenance</h4><pre>${JSON.stringify(x.breakdown,null,2)}\n${JSON.stringify(x.provenance,null,2)}\nFlags: ${JSON.stringify(x.flags)}</pre><h4>FHIR R4 Observation · placeholder extensions</h4><p class="footnote">${foot}</p><pre>${JSON.stringify(await api(`/observations/${id}/fhir`),null,2)}</pre><button class="btn secondary small" onclick="review('${id}','verified')">Mark verified</button> <button class="btn secondary small" onclick="review('${id}','more-info')">Request more info</button>`};window.review=async(id,a)=>{await api(`/observations/${id}/review/${a}`,{method:'POST'});loadResearch();toast('Researcher action recorded')};// Resource fetch helper allows UI refresh without adding an endpoint-specific branch.
-</script><script src="/static/demo.js"></script></body></html>
 <!doctype html>
 <html lang="en">
 <head>
@@ -485,7 +480,7 @@ const $=s=>document.querySelector(s);let current=null;const foot='Based on compl
     </nav>
   </header>
 
-  <main>
+  <main id="app">
     <section id="citizen">
       <div class="hero" id="citizenHero">
         <div class="eyebrow" id="heroEyebrow">A clearer picture, one step at a time</div>
@@ -686,36 +681,6 @@ const $=s=>document.querySelector(s);let current=null;const foot='Based on compl
       $('#researchTab').classList.toggle('active', name === 'research');
       if (name === 'research') loadResearch();
     }
-    $('#citizenTab').onclick = () => view('citizen');
-    $('#researchTab').onclick = () => view('research');
-
-    // Geo button
-    $('#geo').onclick = () => navigator.geolocation?.getCurrentPosition(
-      p => {
-        $('#lat').value = p.coords.latitude.toFixed(5);
-        $('#lng').value = p.coords.longitude.toFixed(5);
-      },
-      () => toast('Could not get location. You can add it manually.')
-    );
-
-    // Multiple photos handling
-    $('#photo').onchange = e => {
-      const files = Array.from(e.target.files);
-      for (const f of files) {
-        if (!attachedPhotos.some(p => p.name === f.name && p.size === f.size)) {
-          attachedPhotos.push({
-            file: f,
-            name: f.name,
-            size: f.size,
-            type: f.type,
-            url: URL.createObjectURL(f)
-          });
-        }
-      }
-      renderPhotoPreviews();
-      $('#photo').value = '';
-    };
-
     function renderPhotoPreviews() {
       const container = $('#photoPreviews');
       const badge = $('#photoCount');
@@ -737,37 +702,6 @@ const $=s=>document.querySelector(s);let current=null;const foot='Based on compl
     window.removePhoto = idx => {
       attachedPhotos.splice(idx, 1);
       renderPhotoPreviews();
-    };
-
-    // Observation submit
-    $('#submit').onclick = async () => {
-      try {
-        let text = $('#observationText').value;
-        let lat = $('#lat').value, lng = $('#lng').value;
-        let photoData = attachedPhotos.map(p => ({ name: p.name, size: p.size, type: p.type }));
-        current = await api('/observations', {
-          method: 'POST',
-          body: JSON.stringify({
-            text,
-            site_id: $('#site').value || 'Greenway Stream',
-            location: lat && lng ? { lat: +lat, lng: +lng } : null,
-            recent_rain: $('#rain').checked,
-            ai_mode: $('#aimode').value,
-            photos: photoData
-          })
-        });
-        $('#startCard').hidden = true;
-        $('#workCard').hidden = false;
-        const photoCheckText = attachedPhotos.length 
-          ? `${attachedPhotos.length} photo${attachedPhotos.length > 1 ? 's' : ''} received`
-          : 'Photo check complete';
-        $('#checklist').innerHTML = [photoCheckText, 'Location checked', 'Details read', 'Checks run']
-          .map(x => `<span class="chip">✓ ${x}</span>`)
-          .join('');
-        setTimeout(showSuggestions, 650);
-      } catch (e) {
-        toast(e.message);
-      }
     };
 
     function showSuggestions() {
@@ -811,15 +745,6 @@ const $=s=>document.querySelector(s);let current=null;const foot='Based on compl
       let v = prompt('Choose a value:\n' + o.map((x, i) => `${i + 1}. ${x}`).join('\n'));
       let n = Number(v);
       if (n > 0 && n <= o.length) confirmOne(k, 'edit', o[n - 1]);
-    };
-
-    $('#continue').onclick = () => {
-      $('#suggestCard').hidden = true;
-      renderResult();
-    };
-    $('#skip').onclick = () => {
-      $('#suggestCard').hidden = true;
-      renderResult();
     };
 
     // Render result card with active question positioned directly above options
@@ -1136,20 +1061,6 @@ const $=s=>document.querySelector(s);let current=null;const foot='Based on compl
       updateStepIndicator(1);
     };
 
-    // Greenway demo loader
-    $('#seed').onclick = async () => {
-      try {
-        let xs = await api('/seed', { method: 'POST' });
-        current = xs[0];
-        activeQuestionKey = current.question ? current.question.field : null;
-        $('#startCard').hidden = true;
-        await renderResult();
-        toast('Demo data loaded. Select a citizen in Researcher view.');
-      } catch (e) {
-        toast(e.message);
-      }
-    };
-
     // Researcher dashboard
     async function loadResearch() {
       let xs = await api('/observations');
@@ -1197,6 +1108,99 @@ const $=s=>document.querySelector(s);let current=null;const foot='Based on compl
       loadResearch();
       toast('Researcher action recorded');
     };
+
+    // One-time boot: binds every DOM handler exactly once. Handlers are
+    // assigned (not appended) and renders use innerHTML replacement, so a
+    // second call is a no-op instead of duplicating UI or listeners.
+    function initApp() {
+      if (window.__aquaAppInitialised) return;
+      window.__aquaAppInitialised = true;
+
+      $('#citizenTab').onclick = () => view('citizen');
+      $('#researchTab').onclick = () => view('research');
+
+      // Geo button
+      $('#geo').onclick = () => navigator.geolocation?.getCurrentPosition(
+        p => {
+          $('#lat').value = p.coords.latitude.toFixed(5);
+          $('#lng').value = p.coords.longitude.toFixed(5);
+        },
+        () => toast('Could not get location. You can add it manually.')
+      );
+
+      // Multiple photos handling
+      $('#photo').onchange = e => {
+        const files = Array.from(e.target.files);
+        for (const f of files) {
+          if (!attachedPhotos.some(p => p.name === f.name && p.size === f.size)) {
+            attachedPhotos.push({
+              file: f,
+              name: f.name,
+              size: f.size,
+              type: f.type,
+              url: URL.createObjectURL(f)
+            });
+          }
+        }
+        renderPhotoPreviews();
+        $('#photo').value = '';
+      };
+
+      // Observation submit
+      $('#submit').onclick = async () => {
+        try {
+          let text = $('#observationText').value;
+          let lat = $('#lat').value, lng = $('#lng').value;
+          let photoData = attachedPhotos.map(p => ({ name: p.name, size: p.size, type: p.type }));
+          current = await api('/observations', {
+            method: 'POST',
+            body: JSON.stringify({
+              text,
+              site_id: $('#site').value || 'Greenway Stream',
+              location: lat && lng ? { lat: +lat, lng: +lng } : null,
+              recent_rain: $('#rain').checked,
+              ai_mode: $('#aimode').value,
+              photos: photoData
+            })
+          });
+          $('#startCard').hidden = true;
+          $('#workCard').hidden = false;
+          const photoCheckText = attachedPhotos.length 
+            ? `${attachedPhotos.length} photo${attachedPhotos.length > 1 ? 's' : ''} received`
+            : 'Photo check complete';
+          $('#checklist').innerHTML = [photoCheckText, 'Location checked', 'Details read', 'Checks run']
+            .map(x => `<span class="chip">✓ ${x}</span>`)
+            .join('');
+          setTimeout(showSuggestions, 650);
+        } catch (e) {
+          toast(e.message);
+        }
+      };
+
+      $('#continue').onclick = () => {
+        $('#suggestCard').hidden = true;
+        renderResult();
+      };
+      $('#skip').onclick = () => {
+        $('#suggestCard').hidden = true;
+        renderResult();
+      };
+
+      // Greenway demo loader
+      $('#seed').onclick = async () => {
+        try {
+          let xs = await api('/seed', { method: 'POST' });
+          current = xs[0];
+          activeQuestionKey = current.question ? current.question.field : null;
+          $('#startCard').hidden = true;
+          await renderResult();
+          toast('Demo data loaded. Select a citizen in Researcher view.');
+        } catch (e) {
+          toast(e.message);
+        }
+      };
+    }
+    initApp();
   </script>
   <script src="/static/demo.js"></script>
 </body>

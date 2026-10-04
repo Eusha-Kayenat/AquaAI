@@ -12,8 +12,8 @@ app.add_middleware(CORSMiddleware,allow_origins=["http://127.0.0.1:8000","http:/
 ROOT=Path(__file__).resolve().parent.parent
 app.mount("/static",StaticFiles(directory=ROOT/"frontend"),name="static")
 class Create(BaseModel):
-    text:str=Field(default="",max_length=4000); site_id:str="unknown"; location:dict|None=None; recent_rain:bool=False; ai_mode:str="simulated"; photo_signals:dict|None=None
-class Answer(BaseModel): answer:str; confirm_conflict:bool=False
+    text:str=Field(default="",max_length=4000); site_id:str="unknown"; location:dict|None=None; recent_rain:bool=False; ai_mode:str="simulated"; photo_signals:dict|None=None; photos:list[dict]|list[str]|None=None
+class Answer(BaseModel): answer:str; confirm_conflict:bool=False; field:str|None=None
 class Confirm(BaseModel): action:str="confirm"; value:str|None=None
 @app.get("/")
 def home(): return FileResponse(ROOT/"frontend"/"index.html")
@@ -27,7 +27,7 @@ def get_item(oid):
 @app.post("/api/observations/{oid}/answer")
 def answer(oid:str,body:Answer):
     item=get_item(oid)
-    try: return store.answer(oid,body.answer,body.confirm_conflict)
+    try: return store.answer(oid,body.answer,body.confirm_conflict,body.field)
     except ValueError as e: raise HTTPException(422,str(e))
 @app.post("/api/observations/{oid}/suggestions/{key}")
 def confirm(oid:str,key:str,body:Confirm):

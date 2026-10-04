@@ -89,21 +89,34 @@
     }
     .card h3 { margin: 0 0 12px; font-size: 19px; }
     .muted { color: var(--ink-muted); font-size: 14px; }
-    .steps { display: flex; gap: 8px; margin: 18px 0; }
+
+    /* Clickable Steps */
+    .steps { display: flex; gap: 8px; margin: 18px 0; flex-wrap: wrap; }
     .step {
-      font-size: 12px;
+      font-size: 13px;
       color: var(--ink-muted);
       background: var(--surface-2);
-      padding: 6px 12px;
+      padding: 7px 14px;
       border-radius: 999px;
       transition: all .2s;
+      border: 1px solid transparent;
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 600;
+    }
+    .step:hover {
+      background: #d8edf3;
+      color: var(--primary-dark);
+      transform: translateY(-1px);
     }
     .step.on {
       background: #c9f1e7;
       color: #075c50;
       font-weight: 700;
-      box-shadow: 0 2px 6px rgba(7,92,80,.15);
+      box-shadow: 0 2px 6px rgba(7,92,80,.18);
+      border-color: #8be3cf;
     }
+
     label { display: block; font-weight: 650; margin: 14px 0 6px; }
     textarea, input, select {
       font: inherit;
@@ -144,6 +157,12 @@
     .secondary { background: var(--surface-2); color: var(--primary-dark); }
     .secondary:hover { background: #d7ecf2; }
     .small { min-height: 36px; padding: 6px 14px; font-size: 13.5px; }
+    .btn-location-active {
+      background: #e6f6e9 !important;
+      color: #23683a !important;
+      border: 1.5px solid #2e9d5b !important;
+      font-weight: 700;
+    }
     .banner {
       border-radius: 12px;
       background: #fff7e7;
@@ -206,7 +225,8 @@
       border: 2px solid var(--primary);
       border-radius: var(--radius);
       padding: 22px;
-      margin-bottom: 22px;
+      margin-top: 24px;
+      margin-bottom: 18px;
       box-shadow: 0 6px 20px rgba(14, 138, 166, 0.12);
     }
     .question-nav {
@@ -259,7 +279,6 @@
       font-weight: 700;
       box-shadow: 0 2px 8px rgba(14, 138, 166, 0.15);
     }
-    .option.unsure { color: var(--ink-muted); border-style: dashed; }
     .other-input-container {
       margin: 10px 0 14px 0;
       padding: 14px;
@@ -275,7 +294,7 @@
       padding: 12px 16px;
       background: var(--surface-2);
       border-radius: 12px;
-      margin-bottom: 20px;
+      margin-top: 20px;
     }
     .answered-chip {
       display: inline-flex;
@@ -480,7 +499,7 @@
     </nav>
   </header>
 
-  <main id="app">
+  <main>
     <section id="citizen">
       <div class="hero" id="citizenHero">
         <div class="eyebrow" id="heroEyebrow">A clearer picture, one step at a time</div>
@@ -488,11 +507,12 @@
         <p id="heroSubtitle">Share what you saw. We’ll help find the one detail that matters most.</p>
       </div>
 
+      <!-- Step Navigation (Clickable) -->
       <div class="steps" id="stepBar">
-        <span class="step on" id="step1">1 Observe</span>
-        <span class="step" id="step2">2 Review</span>
-        <span class="step" id="step3">3 Answer</span>
-        <span class="step" id="step4">4 Done</span>
+        <button type="button" class="step on" id="step1" onclick="goToStep(1)">1 Observe</button>
+        <button type="button" class="step" id="step2" onclick="goToStep(2)">2 Review</button>
+        <button type="button" class="step" id="step3" onclick="goToStep(3)">3 Answer</button>
+        <button type="button" class="step" id="step4" onclick="goToStep(4)">4 Done</button>
       </div>
 
       <div class="layout">
@@ -500,8 +520,8 @@
           <!-- STEP 1: START CARD -->
           <section class="card" id="startCard">
             <h3>Your observation</h3>
-            <label for="observationText">Tell us what you noticed</label>
-            <textarea id="observationText" placeholder="For example: the water looked clear, and both banks had plants."></textarea>
+            <label for="observationText">Tell us what you noticed <span style="color:var(--expert)">*</span></label>
+            <textarea id="observationText" placeholder="For example: the water looked clear, and both banks had plants." required></textarea>
             
             <div class="row">
               <div>
@@ -513,7 +533,7 @@
                 <div class="photo-upload-area">
                   <input id="photo" type="file" accept="image/jpeg,image/png,image/webp" multiple style="display:none">
                   <button type="button" class="btn secondary small" style="width:100%" onclick="$('#photo').click()">
-                    📷 Choose photo(s)
+                    Choose photos
                   </button>
                   <div id="photoPreviews" class="photo-previews"></div>
                   <div id="photoCount" class="photo-badge" style="display:none"></div>
@@ -674,6 +694,48 @@
       }
     }
 
+    // Step jumping navigation
+    window.goToStep = async step => {
+      if (step === 1) {
+        $('#startCard').hidden = false;
+        $('#workCard').hidden = true;
+        $('#suggestCard').hidden = true;
+        $('#resultCard').hidden = true;
+        updateStepIndicator(1);
+      } else if (step === 2) {
+        if (!current) {
+          toast('Please enter your observation and submit first.');
+          return;
+        }
+        $('#startCard').hidden = true;
+        $('#workCard').hidden = true;
+        $('#resultCard').hidden = true;
+        showSuggestions();
+      } else if (step === 3) {
+        if (!current) {
+          toast('Please enter your observation and submit first.');
+          return;
+        }
+        $('#startCard').hidden = true;
+        $('#workCard').hidden = true;
+        $('#suggestCard').hidden = true;
+        if (!activeQuestionKey) {
+          activeQuestionKey = current.question ? current.question.field : Object.keys(current.answers || {})[0] || 'banks';
+        }
+        await renderResult();
+      } else if (step === 4) {
+        if (!current) {
+          toast('Please enter your observation and submit first.');
+          return;
+        }
+        $('#startCard').hidden = true;
+        $('#workCard').hidden = true;
+        $('#suggestCard').hidden = true;
+        activeQuestionKey = null; // Summary mode
+        await renderResult();
+      }
+    };
+
     function view(name) {
       $('#citizen').style.display = name === 'citizen' ? 'block' : 'none';
       $('#reviewer').style.display = name === 'research' ? 'block' : 'none';
@@ -681,6 +743,60 @@
       $('#researchTab').classList.toggle('active', name === 'research');
       if (name === 'research') loadResearch();
     }
+    $('#citizenTab').onclick = () => view('citizen');
+    $('#researchTab').onclick = () => view('research');
+
+    // Geo button with proper status styling and notification
+    $('#geo').onclick = () => {
+      if (!navigator.geolocation) {
+        toast('Geolocation is not supported by your browser.');
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(
+        p => {
+          const lat = p.coords.latitude.toFixed(5);
+          const lng = p.coords.longitude.toFixed(5);
+          $('#lat').value = lat;
+          $('#lng').value = lng;
+          $('#geo').classList.add('btn-location-active');
+          $('#geo').textContent = `Location active: ${lat}, ${lng}`;
+          toast(`Location is being used: ${lat}, ${lng}`);
+        },
+        err => {
+          toast('Could not get location. You can add it manually.');
+        }
+      );
+    };
+
+    // Notice when lat/lng are manually edited
+    $('#lat').oninput = $('#lng').oninput = () => {
+      const lat = $('#lat').value.trim();
+      const lng = $('#lng').value.trim();
+      if (lat && lng) {
+        $('#geo').classList.add('btn-location-active');
+        $('#geo').textContent = `Location entered: ${lat}, ${lng}`;
+        toast(`Location is being used: ${lat}, ${lng}`);
+      }
+    };
+
+    // Multiple photos handling (NO EMOJIS)
+    $('#photo').onchange = e => {
+      const files = Array.from(e.target.files);
+      for (const f of files) {
+        if (!attachedPhotos.some(p => p.name === f.name && p.size === f.size)) {
+          attachedPhotos.push({
+            file: f,
+            name: f.name,
+            size: f.size,
+            type: f.type,
+            url: URL.createObjectURL(f)
+          });
+        }
+      }
+      renderPhotoPreviews();
+      $('#photo').value = '';
+    };
+
     function renderPhotoPreviews() {
       const container = $('#photoPreviews');
       const badge = $('#photoCount');
@@ -690,7 +806,7 @@
         return;
       }
       badge.style.display = 'inline-flex';
-      badge.textContent = `✓ ${attachedPhotos.length} photo${attachedPhotos.length > 1 ? 's' : ''} attached`;
+      badge.textContent = `${attachedPhotos.length} photo${attachedPhotos.length > 1 ? 's' : ''} attached`;
       container.innerHTML = attachedPhotos.map((p, idx) => `
         <div class="photo-thumb" title="${escapeHtml(p.name)}">
           <img src="${p.url}" alt="Photo ${idx + 1}">
@@ -702,6 +818,46 @@
     window.removePhoto = idx => {
       attachedPhotos.splice(idx, 1);
       renderPhotoPreviews();
+    };
+
+    // Observation submit: description box MUST be filled or otherwise it won't proceed
+    $('#submit').onclick = async () => {
+      const descInput = $('#observationText');
+      const text = (descInput.value || '').trim();
+      if (!text) {
+        descInput.focus();
+        descInput.style.borderColor = 'var(--expert)';
+        toast('Please fill in what you noticed before proceeding.');
+        return;
+      }
+      descInput.style.borderColor = 'var(--border)';
+
+      try {
+        let lat = $('#lat').value, lng = $('#lng').value;
+        let photoData = attachedPhotos.map(p => ({ name: p.name, size: p.size, type: p.type }));
+        current = await api('/observations', {
+          method: 'POST',
+          body: JSON.stringify({
+            text,
+            site_id: $('#site').value || 'Greenway Stream',
+            location: lat && lng ? { lat: +lat, lng: +lng } : null,
+            recent_rain: $('#rain').checked,
+            ai_mode: $('#aimode').value,
+            photos: photoData
+          })
+        });
+        $('#startCard').hidden = true;
+        $('#workCard').hidden = false;
+        const photoCheckText = attachedPhotos.length 
+          ? `${attachedPhotos.length} photo${attachedPhotos.length > 1 ? 's' : ''} received`
+          : 'Photo check complete';
+        $('#checklist').innerHTML = [photoCheckText, 'Location checked', 'Details read', 'Checks run']
+          .map(x => `<span class="chip">✓ ${x}</span>`)
+          .join('');
+        setTimeout(showSuggestions, 650);
+      } catch (e) {
+        toast(e.message);
+      }
     };
 
     function showSuggestions() {
@@ -747,7 +903,16 @@
       if (n > 0 && n <= o.length) confirmOne(k, 'edit', o[n - 1]);
     };
 
-    // Render result card with active question positioned directly above options
+    $('#continue').onclick = () => {
+      $('#suggestCard').hidden = true;
+      renderResult();
+    };
+    $('#skip').onclick = () => {
+      $('#suggestCard').hidden = true;
+      renderResult();
+    };
+
+    // Render result card: YOUR EVIDENCE SUMMARY IS PLACED AT THE TOP OF THE QUESTIONS
     async function renderResult() {
       if (!current) return;
       current = await api(`/observations/${current.id}`).catch(() => current);
@@ -773,11 +938,15 @@
       if (isAnswering) {
         const fieldMeta = fields[activeQuestionKey];
         const isCurrentRecommended = current.question && current.question.field === activeQuestionKey;
+        // Filter out any "Not sure" / "I'm not sure" options from the choices
+        const filteredOptions = (fieldMeta.options || []).filter(
+          opt => opt.toLowerCase() !== "not sure" && opt.toLowerCase() !== "i'm not sure"
+        );
         qData = {
           field: activeQuestionKey,
           label: fieldMeta.label,
           text: fieldMeta.label + '?',
-          options: fieldMeta.options,
+          options: filteredOptions,
           why: isCurrentRecommended && current.question.why 
             ? current.question.why 
             : `${fieldMeta.label} is an important stream observation detail.`,
@@ -791,32 +960,11 @@
       const isViewingAnswered = answeredIndex !== -1;
       const hasNextUnanswered = !!(current.question && current.question.field && current.question.field !== activeQuestionKey);
 
-      // Build Answered Questions Bar
-      let answeredNavHtml = '';
-      if (answeredKeys.length > 0) {
-        answeredNavHtml = `
-          <div class="answered-nav">
-            <span class="muted" style="font-size:12px;font-weight:700;margin-right:4px;">QUESTIONS:</span>
-            ${answeredKeys.map(k => {
-              const label = fields[k]?.label || k;
-              const ans = current.answers[k];
-              const isSelected = k === activeQuestionKey;
-              return `
-                <button type="button" class="answered-chip ${isSelected ? 'active' : ''}" onclick="editQuestion('${k}')">
-                  <span>✓ <b>${escapeHtml(label)}</b>: ${escapeHtml(ans)}</span>
-                  <span style="font-size:11px;opacity:0.8">✏ Edit</span>
-                </button>
-              `;
-            }).join('')}
-          </div>
-        `;
-      }
-
-      // Build Question Box HTML directly above options
+      // Build Question Box HTML (placed below Evidence Summary)
       let questionBoxHtml = '';
       if (qData) {
         const currentAns = qData.currentAnswer || '';
-        const isOtherAnswer = currentAns.startsWith('Other:') || currentAns.startsWith('Others:') || (currentAns && !qData.options.includes(currentAns) && currentAns !== "I'm not sure");
+        const isOtherAnswer = currentAns.startsWith('Other:') || currentAns.startsWith('Others:') || (currentAns && !qData.options.includes(currentAns) && currentAns.toLowerCase() !== "not sure" && currentAns.toLowerCase() !== "i'm not sure");
         const customOtherVal = isOtherAnswer ? currentAns.replace(/^Others?:\s*/i, '') : '';
         const currentQuestionNum = (answeredIndex !== -1 ? answeredIndex : answeredKeys.length) + 1;
         const totalQuestionCount = allFieldKeys.length;
@@ -833,7 +981,8 @@
               </div>
             </div>
 
-            <h2 class="question-title" style="margin:4px 0 8px;">${escapeHtml(qData.text)}</h2>
+            <!-- Question title is positioned directly above the options -->
+            <h2 class="question-title">${escapeHtml(qData.text)}</h2>
             <p class="question-why">${escapeHtml(qData.why)}</p>
 
             <div id="opts">
@@ -847,9 +996,9 @@
                 `;
               }).join('')}
 
-              <!-- Others: option -->
+              <!-- Others: option (NO EMOJIS, TEXT ONLY) -->
               <button type="button" class="option ${isOtherAnswer ? 'selected' : ''}" id="otherOptionBtn" onclick="toggleOtherInput()">
-                <span>${isOtherAnswer ? '✓ ' : '✍ '}<b>Others:</b> ${isOtherAnswer ? escapeHtml(currentAns) : 'Specify your own answer'}</span>
+                <span>${isOtherAnswer ? '✓ ' : ''}<b>Others:</b> ${isOtherAnswer ? escapeHtml(currentAns) : 'Specify your own answer'}</span>
                 ${isOtherAnswer ? '<span class="status ready" style="padding:2px 8px;font-size:11px">Custom answer</span>' : ''}
               </button>
 
@@ -862,11 +1011,6 @@
                   <button type="button" class="btn primary small" onclick="submitOtherAnswer()">Submit</button>
                 </div>
               </div>
-
-              <!-- I'm not sure option -->
-              <button type="button" class="option unsure ${currentAns === "I'm not sure" ? 'selected' : ''}" onclick="sendAnswer('I\\\'m not sure')">
-                <span>${currentAns === "I'm not sure" ? '✓ ' : ''}I'm not sure</span>
-              </button>
             </div>
 
             <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:12px;border-top:1px solid var(--border);flex-wrap:wrap;gap:8px">
@@ -877,7 +1021,28 @@
         `;
       }
 
-      // Evidence summary and breakdown details
+      // Build Answered Questions Bar
+      let answeredNavHtml = '';
+      if (answeredKeys.length > 0) {
+        answeredNavHtml = `
+          <div class="answered-nav">
+            <span class="muted" style="font-size:12px;font-weight:700;margin-right:4px;">QUESTIONS:</span>
+            ${answeredKeys.map(k => {
+              const label = fields[k]?.label || k;
+              const ans = current.answers[k];
+              const isSelected = k === activeQuestionKey;
+              return `
+                <button type="button" class="answered-chip ${isSelected ? 'active' : ''}" onclick="editQuestion('${k}')">
+                  <span>✓ <b>${escapeHtml(label)}</b>: ${escapeHtml(ans)}</span>
+                  <span style="font-size:11px;opacity:0.8">Edit</span>
+                </button>
+              `;
+            }).join('')}
+          </div>
+        `;
+      }
+
+      // Evidence summary items (AT THE TOP)
       const b = current.breakdown || {};
       const q = current.question;
       const flagsHtml = current.flags?.length 
@@ -898,7 +1063,7 @@
               ${answeredKeys.map(k => `
                 <button type="button" class="answered-chip" onclick="editQuestion('${k}')">
                   <span>${escapeHtml(fields[k]?.label || k)}: <b>${escapeHtml(current.answers[k])}</b></span>
-                  <span style="font-size:11px">✏ Edit</span>
+                  <span style="font-size:11px">Edit</span>
                 </button>
               `).join('')}
             </div>
@@ -908,11 +1073,9 @@
       ` : '';
 
       $('#resultCard').hidden = false;
+      // LAYOUT: YOUR EVIDENCE SUMMARY AT THE TOP, QUESTIONS BELOW
       $('#resultCard').innerHTML = `
-        ${questionBoxHtml}
-        ${answeredNavHtml}
-
-        <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border);">
+        <div class="evidence-summary-top">
           <div class="eyebrow">Your evidence summary</div>
           <div class="gauge">
             <div class="ring" style="--pct:${current.score}"><strong>${current.score}%</strong></div>
@@ -949,9 +1112,11 @@
               <small>Next field: ${escapeHtml(q.field)}; gain ${q.gain}. Runner-up: ${(q.runner_up || []).map(x => escapeHtml(x.field)).join(', ') || 'none'}.</small>
             ` : ''}
           </details>
-
-          ${completionDoneHtml}
         </div>
+
+        ${questionBoxHtml}
+        ${answeredNavHtml}
+        ${completionDoneHtml}
       `;
     }
 
@@ -1058,7 +1223,25 @@
       $('#resultCard').hidden = true;
       $('#startCard').hidden = false;
       $('#observationText').value = '';
+      $('#lat').value = '';
+      $('#lng').value = '';
+      $('#geo').className = 'btn secondary';
+      $('#geo').textContent = 'Use my location';
       updateStepIndicator(1);
+    };
+
+    // Greenway demo loader
+    $('#seed').onclick = async () => {
+      try {
+        let xs = await api('/seed', { method: 'POST' });
+        current = xs[0];
+        activeQuestionKey = current.question ? current.question.field : null;
+        $('#startCard').hidden = true;
+        await renderResult();
+        toast('Demo data loaded. Select a citizen in Researcher view.');
+      } catch (e) {
+        toast(e.message);
+      }
     };
 
     // Researcher dashboard
@@ -1108,99 +1291,6 @@
       loadResearch();
       toast('Researcher action recorded');
     };
-
-    // One-time boot: binds every DOM handler exactly once. Handlers are
-    // assigned (not appended) and renders use innerHTML replacement, so a
-    // second call is a no-op instead of duplicating UI or listeners.
-    function initApp() {
-      if (window.__aquaAppInitialised) return;
-      window.__aquaAppInitialised = true;
-
-      $('#citizenTab').onclick = () => view('citizen');
-      $('#researchTab').onclick = () => view('research');
-
-      // Geo button
-      $('#geo').onclick = () => navigator.geolocation?.getCurrentPosition(
-        p => {
-          $('#lat').value = p.coords.latitude.toFixed(5);
-          $('#lng').value = p.coords.longitude.toFixed(5);
-        },
-        () => toast('Could not get location. You can add it manually.')
-      );
-
-      // Multiple photos handling
-      $('#photo').onchange = e => {
-        const files = Array.from(e.target.files);
-        for (const f of files) {
-          if (!attachedPhotos.some(p => p.name === f.name && p.size === f.size)) {
-            attachedPhotos.push({
-              file: f,
-              name: f.name,
-              size: f.size,
-              type: f.type,
-              url: URL.createObjectURL(f)
-            });
-          }
-        }
-        renderPhotoPreviews();
-        $('#photo').value = '';
-      };
-
-      // Observation submit
-      $('#submit').onclick = async () => {
-        try {
-          let text = $('#observationText').value;
-          let lat = $('#lat').value, lng = $('#lng').value;
-          let photoData = attachedPhotos.map(p => ({ name: p.name, size: p.size, type: p.type }));
-          current = await api('/observations', {
-            method: 'POST',
-            body: JSON.stringify({
-              text,
-              site_id: $('#site').value || 'Greenway Stream',
-              location: lat && lng ? { lat: +lat, lng: +lng } : null,
-              recent_rain: $('#rain').checked,
-              ai_mode: $('#aimode').value,
-              photos: photoData
-            })
-          });
-          $('#startCard').hidden = true;
-          $('#workCard').hidden = false;
-          const photoCheckText = attachedPhotos.length 
-            ? `${attachedPhotos.length} photo${attachedPhotos.length > 1 ? 's' : ''} received`
-            : 'Photo check complete';
-          $('#checklist').innerHTML = [photoCheckText, 'Location checked', 'Details read', 'Checks run']
-            .map(x => `<span class="chip">✓ ${x}</span>`)
-            .join('');
-          setTimeout(showSuggestions, 650);
-        } catch (e) {
-          toast(e.message);
-        }
-      };
-
-      $('#continue').onclick = () => {
-        $('#suggestCard').hidden = true;
-        renderResult();
-      };
-      $('#skip').onclick = () => {
-        $('#suggestCard').hidden = true;
-        renderResult();
-      };
-
-      // Greenway demo loader
-      $('#seed').onclick = async () => {
-        try {
-          let xs = await api('/seed', { method: 'POST' });
-          current = xs[0];
-          activeQuestionKey = current.question ? current.question.field : null;
-          $('#startCard').hidden = true;
-          await renderResult();
-          toast('Demo data loaded. Select a citizen in Researcher view.');
-        } catch (e) {
-          toast(e.message);
-        }
-      };
-    }
-    initApp();
   </script>
   <script src="/static/demo.js"></script>
 </body>

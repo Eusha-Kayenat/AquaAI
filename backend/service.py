@@ -49,8 +49,14 @@ class Store:
         item["flags"]=plausibility_flags(item,self.items.values())
         self.recompute(item); self.items[item["id"]]=item; self.save(item); return item
     def recompute(self,item):
-        item["score"],item["breakdown"]=score(item["answers"],item.get("photo_signals"),item.get("confirmed_conflicts"))
-        decision=next_question(item["answers"],item.get("photo_signals"),item.get("confirmed_conflicts"))
+        ctx = {
+            "has_location": bool(item.get("location")),
+            "photos_count": len(item.get("photos") or []),
+            "text_length": len(item.get("text") or ""),
+            "flags_count": len([f for f in item.get("flags") or [] if f.get("code") != "location_missing"])
+        }
+        item["score"],item["breakdown"]=score(item["answers"],item.get("photo_signals"),item.get("confirmed_conflicts"),context=ctx)
+        decision=next_question(item["answers"],item.get("photo_signals"),item.get("confirmed_conflicts"),context=ctx)
         item["question"]={"field":decision.field,"text":FIELDS[decision.field]["label"]+"?" if decision.field else None,"options":FIELDS[decision.field]["options"] if decision.field else [],"gain":decision.gain,"why":decision.why,"runner_up":decision.runner_up} if decision.field else None
         item["decision_log"].append({"field":decision.field,"gain":decision.gain,"runner_up":decision.runner_up})
         has_conflict=any(v["state"]=="conflict" for v in item["breakdown"].values())

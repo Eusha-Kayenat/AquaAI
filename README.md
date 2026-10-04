@@ -2,7 +2,7 @@
   <img src="assets/logo.png" alt="AquaAI Logo" width="190" height="190" />
 </p>
 
-<h1 align="center">AquaAI (AquaClue)</h1>
+<h1 align="center">AquaAI</h1>
 
 <p align="center">
   <strong>"Find the Missing Piece"</strong><br>

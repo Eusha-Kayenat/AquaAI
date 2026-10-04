@@ -2,7 +2,7 @@
   <img src="assets/logo.png" alt="AquaAI Logo" width="190" height="190" />
 </p>
 
-<h1 align="center">AquaAI (AquaClue)</h1>
+<h1 align="center">AquaAI</h1>
 
 <p align="center">
   <strong>"Find the Missing Piece"</strong><br>
@@ -27,7 +27,7 @@ The **OneAquaHealth Citizen Science App** invites community volunteers to assess
 - Environmental scientists cannot distinguish trustworthy submissions from noise, requiring costly manual triage.
 - Lengthy forms deter repeat community participation, degrading long-term One Health surveillance.
 
-**AquaAI (AquaClue)** solves this with an adaptive, human-in-the-loop intelligence layer. Instead of demanding a 20-field questionnaire upfront, it evaluates existing evidence, detects the highest-value information gap, and poses **one plain-language question at a time** until the observation reaches scientific readiness.
+**AquaAI** solves this with an adaptive, human-in-the-loop intelligence layer. Instead of demanding a 20-field questionnaire upfront, it evaluates existing evidence, detects the highest-value information gap, and poses **one plain-language question at a time** until the observation reaches scientific readiness.
 
 ```
        [ Citizen Observation / Photos ]

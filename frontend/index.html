@@ -105,6 +105,29 @@
       grid-template-columns: minmax(0, 1.35fr) minmax(260px, .65fr);
       gap: 20px;
     }
+    .citizen-main-flow {
+      width: 100%;
+    }
+    .info-flat-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 20px;
+      margin-top: 24px;
+    }
+    .info-flat-grid .card {
+      margin-bottom: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+    .info-flat-grid .wave {
+      margin-top: auto;
+    }
+    @media (max-width: 860px) {
+      .info-flat-grid {
+        grid-template-columns: 1fr;
+      }
+    }
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -833,90 +856,88 @@
         <button type="button" class="step" id="step4" onclick="goToStep(4)">4 Done</button>
       </div>
 
-      <div class="layout">
-        <div>
-          <!-- STEP 1: START CARD -->
-          <section class="card" id="startCard">
-            <h3>Your observation</h3>
-            <label for="observationText">Tell us what you noticed <span style="color:var(--expert)">*</span></label>
-            <textarea id="observationText" placeholder="For example: the water looked clear, and both banks had plants." required></textarea>
-            
+      <div class="citizen-main-flow">
+        <!-- STEP 1: START CARD -->
+        <section class="card" id="startCard">
+          <h3>Your observation</h3>
+          <label for="observationText">Tell us what you noticed <span style="color:var(--expert)">*</span></label>
+          <textarea id="observationText" placeholder="For example: the water looked clear, and both banks had plants." required></textarea>
+          
+          <div>
+            <label for="photo">Add photos <span style="color:var(--expert)">*</span></label>
+            <div class="photo-upload-area">
+              <input id="photo" type="file" accept="image/jpeg,image/png,image/webp" multiple style="display:none">
+              <button type="button" class="btn secondary small" id="choosePhotoBtn" style="width:100%" onclick="$('#photo').click()">
+                Choose photos
+              </button>
+              <div id="photoPreviews" class="photo-previews"></div>
+              <div id="photoCount" class="photo-badge" style="display:none"></div>
+            </div>
+          </div>
+
+          <div class="row">
             <div>
-              <label for="photo">Add photos <span style="color:var(--expert)">*</span></label>
-              <div class="photo-upload-area">
-                <input id="photo" type="file" accept="image/jpeg,image/png,image/webp" multiple style="display:none">
-                <button type="button" class="btn secondary small" id="choosePhotoBtn" style="width:100%" onclick="$('#photo').click()">
-                  Choose photos
-                </button>
-                <div id="photoPreviews" class="photo-previews"></div>
-                <div id="photoCount" class="photo-badge" style="display:none"></div>
-              </div>
+              <label for="lat">Latitude (optional)</label>
+              <input id="lat" inputmode="decimal" placeholder="23.78">
             </div>
-
-            <div class="row">
-              <div>
-                <label for="lat">Latitude (optional)</label>
-                <input id="lat" inputmode="decimal" placeholder="23.78">
-              </div>
-              <div>
-                <label for="lng">Longitude</label>
-                <input id="lng" inputmode="decimal" placeholder="90.41">
-              </div>
+            <div>
+              <label for="lng">Longitude</label>
+              <input id="lng" inputmode="decimal" placeholder="90.41">
             </div>
+          </div>
 
-            <label><input id="rain" type="checkbox" style="width:auto"> Heavy rain in the last 24 hours?</label>
-            
-            <label for="aimode">AI assist</label>
-            <select id="aimode">
-              <option value="off" selected>Off · rule-based only</option>
-              <option value="simulated">Simulated · demo suggestions</option>
-              <option value="live">Live · only if configured</option>
-            </select>
-            <p class="muted">AI assist is optional. Suggestions stay unconfirmed until you review them.</p>
+          <label><input id="rain" type="checkbox" style="width:auto"> Heavy rain in the last 24 hours?</label>
+          
+          <label for="aimode">AI assist</label>
+          <select id="aimode">
+            <option value="off" selected>Off · rule-based only</option>
+            <option value="simulated">Simulated · demo suggestions</option>
+            <option value="live">Live · only if configured</option>
+          </select>
+          <p class="muted">AI assist is optional. Suggestions stay unconfirmed until you review them.</p>
 
-            <div class="actions-row">
-              <button class="btn primary" id="submit">Review my observation <span aria-hidden="true">→</span></button>
-              <button class="btn secondary" id="geo">Use my location</button>
-              <button class="btn secondary" id="seed">Try the Greenway Stream demo</button>
-            </div>
-          </section>
+          <div class="actions-row">
+            <button class="btn primary" id="submit">Review my observation <span aria-hidden="true">→</span></button>
+            <button class="btn secondary" id="geo">Use my location</button>
+            <button class="btn secondary" id="seed">Try the Greenway Stream demo</button>
+          </div>
+        </section>
 
-          <!-- STEP 2: WORK / REVIEW CARDS -->
-          <section class="card" id="workCard" hidden>
-            <h3>AquaAI is reviewing…</h3>
-            <div class="chips" id="checklist"></div>
-          </section>
+        <!-- STEP 2: WORK / REVIEW CARDS -->
+        <section class="card" id="workCard" hidden>
+          <h3>AquaAI is reviewing…</h3>
+          <div class="chips" id="checklist"></div>
+        </section>
 
-          <section class="card" id="suggestCard" hidden>
-            <h3>Did we get this right?</h3>
-            <p class="muted">These are suggestions only. Confirm, change, or remove each one.</p>
-            <div id="suggestions"></div>
-            <button class="btn primary" id="continue">Continue to my result</button>
-            <button class="btn secondary" id="skip">Skip suggestions</button>
-          </section>
+        <section class="card" id="suggestCard" hidden>
+          <h3>Did we get this right?</h3>
+          <p class="muted">These are suggestions only. Confirm, change, or remove each one.</p>
+          <div id="suggestions"></div>
+          <button class="btn primary" id="continue">Continue to my result</button>
+          <button class="btn secondary" id="skip">Skip suggestions</button>
+        </section>
 
-          <!-- STEP 3 & 4: RESULT / ANSWER CARD -->
-          <section class="card" id="resultCard" hidden></section>
-        </div>
-
-        <!-- ASIDE -->
-        <aside>
-          <section class="card">
-            <h3>A human stays in control</h3>
-            <p class="muted">AquaAI looks for missing or conflicting details. It never decides what the stream is like, diagnoses pollution, or silently changes what you told us.</p>
-            <div class="banner">Evidence completeness describes how much supporting information we have. It is not a verdict about environmental truth.</div>
-            <details class="details">
-              <summary>About the AI</summary>
-              <p class="muted">The offline demo uses deterministic simulated suggestions, clearly labelled. Optional live providers are currently a safe fallback, not a connected model. AI may suggest or rephrase; the rule-based engine alone scores and selects questions. In live mode, text and photos could be sent to the configured provider. AI is off by default.</p>
-            </details>
-            <div class="wave"></div>
-          </section>
-          <section class="card">
-            <h3>Why one question?</h3>
-            <p class="muted">A shorter assessment can still capture useful evidence. AquaAI asks for the highest-value missing detail, then stops when it has enough.</p>
-          </section>
-        </aside>
+        <!-- STEP 3 & 4: RESULT / ANSWER CARD -->
+        <section class="card" id="resultCard" hidden></section>
       </div>
+
+      <!-- BOTTOM INFO CARDS (FLAT AT BOTTOM) -->
+      <section class="info-flat-grid" aria-label="Assessment principles">
+        <div class="card">
+          <h3>A human stays in control</h3>
+          <p class="muted">AquaAI evaluates evidence completeness and detects observational gaps in real time. It never assumes stream conditions, diagnoses pollution, or alters your reported findings—the AI points to the water, but your judgment has the final word.</p>
+          <div class="banner">Evidence completeness describes how much supporting information we have. It is not a verdict about environmental truth.</div>
+          <details class="details">
+            <summary>About the AI</summary>
+            <p class="muted">The offline demo uses deterministic simulated suggestions, clearly labelled. Optional live providers are currently a safe fallback, not a connected model. AI may suggest or rephrase; the rule-based engine alone scores and selects questions. In live mode, text and photos could be sent to the configured provider. AI is off by default.</p>
+          </details>
+          <div class="wave"></div>
+        </div>
+        <div class="card">
+          <h3>Why one question?</h3>
+          <p class="muted">A shorter assessment can still capture useful evidence. AquaAI asks for the highest-value missing detail, then stops when it has enough.</p>
+        </div>
+      </section>
     </section>
 
     <!-- RESEARCHER VIEW -->

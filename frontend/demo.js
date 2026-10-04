@@ -23,12 +23,16 @@ if (!window.__aquaDemoPatched) {
     current = demoItems[index];
     renderResult();
   };
+  const origReset = window.resetForm;
   window.resetForm = () => {
     demoItems = [];
-    current = null;
-    document.querySelector('#resultCard').hidden = true;
-    document.querySelector('#startCard').hidden = false;
-    document.querySelector('#observationText').value = '';
+    if (origReset) origReset();
+    else {
+      current = null;
+      document.querySelector('#resultCard').hidden = true;
+      document.querySelector('#startCard').hidden = false;
+      document.querySelector('#observationText').value = '';
+    }
   };
   document.querySelector('#seed').onclick = async () => {
     try {

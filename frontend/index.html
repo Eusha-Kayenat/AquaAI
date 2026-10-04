@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#0b5c73">
-  <title>AquaAI — Find the Missing Piece</title>
+  <title>AquaAI</title>
   <style>
     :root {
       --bg: #F2F9FB;
@@ -40,7 +40,28 @@
       justify-content: space-between;
       gap: 18px;
     }
-    .brand { display: flex; gap: 13px; align-items: center; }
+    .brand {
+      display: flex;
+      gap: 13px;
+      align-items: center;
+      text-decoration: none;
+      color: white;
+      cursor: pointer;
+      user-select: none;
+      transition: opacity .15s ease, transform .15s ease;
+    }
+    .brand:hover {
+      opacity: .95;
+    }
+    .brand:hover .logo {
+      transform: scale(1.04);
+      background: #ffffff35;
+    }
+    .brand:focus-visible {
+      outline: 3px solid #72d6c1;
+      outline-offset: 4px;
+      border-radius: 12px;
+    }
     .logo {
       width: 46px;
       height: 46px;
@@ -48,9 +69,11 @@
       border-radius: 15px;
       display: grid;
       place-items: center;
+      transition: transform .15s ease, background .15s ease;
+      cursor: pointer;
     }
-    .brand h1 { font-size: 23px; line-height: 1.1; margin: 0; }
-    .tagline { font-size: 13px; opacity: .86; }
+    .brand h1 { font-size: 23px; line-height: 1.1; margin: 0; color: white; }
+    .tagline { font-size: 13px; opacity: .86; color: white; }
     .tabs { display: flex; gap: 8px; }
     .tab {
       border: 1px solid #ffffff70;
@@ -162,6 +185,25 @@
       color: #23683a !important;
       border: 1.5px solid #2e9d5b !important;
       font-weight: 700;
+    }
+    .actions-row {
+      display: flex !important;
+      flex-direction: row !important;
+      flex-wrap: nowrap !important;
+      gap: 10px;
+      align-items: center;
+      margin-top: 16px;
+      width: 100%;
+    }
+    .actions-row .btn {
+      flex: 1 1 0 !important;
+      min-width: 0 !important;
+      padding: 10px 6px !important;
+      font-size: clamp(11.5px, 1.05vw, 13.5px);
+      white-space: nowrap !important;
+      min-height: 46px;
+      text-align: center;
+      justify-content: center;
     }
     .banner {
       border-radius: 12px;
@@ -494,7 +536,7 @@
 </head>
 <body>
   <header>
-    <div class="brand">
+    <a href="/" class="brand" id="brandLink" onclick="goHome(event)" title="Return to Home">
       <span class="logo" aria-hidden="true">
         <svg width="31" height="31" viewBox="0 0 32 32" fill="none">
           <path d="M16 2C13 8 6 14 6 20a10 10 0 0 0 20 0C26 14 19 8 16 2Z" stroke="white" stroke-width="2.2"/>
@@ -506,7 +548,7 @@
         <h1>AquaAI</h1>
         <div class="tagline">Don't ask everything. Ask what matters.</div>
       </div>
-    </div>
+    </a>
     <nav class="tabs">
       <button class="tab active" id="citizenTab">Citizen</button>
       <button class="tab" id="researchTab">Researcher · demo access</button>
@@ -570,9 +612,11 @@
             </select>
             <p class="muted">AI assist is optional. Suggestions stay unconfirmed until you review them.</p>
 
-            <button class="btn primary" id="submit">Review my observation <span aria-hidden="true">→</span></button>
-            <button class="btn secondary" id="geo">Use my location</button>
-            <button class="btn secondary" id="seed">Try the Greenway Stream demo</button>
+            <div class="actions-row">
+              <button class="btn primary" id="submit">Review my observation <span aria-hidden="true">→</span></button>
+              <button class="btn secondary" id="geo">Use my location</button>
+              <button class="btn secondary" id="seed">Try the Greenway Stream demo</button>
+            </div>
           </section>
 
           <!-- STEP 2: WORK / REVIEW CARDS -->
@@ -767,7 +811,8 @@
           $('#lat').value = lat;
           $('#lng').value = lng;
           $('#geo').classList.add('btn-location-active');
-          $('#geo').textContent = `Location active: ${lat}, ${lng}`;
+          $('#geo').textContent = 'Location active';
+          $('#geo').title = `Location: ${lat}, ${lng}`;
           toast(`Location is being used: ${lat}, ${lng}`);
         },
         err => {
@@ -782,7 +827,8 @@
       const lng = $('#lng').value.trim();
       if (lat && lng) {
         $('#geo').classList.add('btn-location-active');
-        $('#geo').textContent = `Location entered: ${lat}, ${lng}`;
+        $('#geo').textContent = 'Location active';
+        $('#geo').title = `Location: ${lat}, ${lng}`;
         toast(`Location is being used: ${lat}, ${lng}`);
       }
     };
@@ -1237,23 +1283,45 @@
       if (qBox) qBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
     };
 
+    // Return to home page
+    window.goHome = e => {
+      if (e) e.preventDefault();
+      view('citizen');
+      if (window.demoItems) window.demoItems = [];
+      resetForm();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
     // Reset form to start a new observation
     window.resetForm = () => {
       current = null;
       activeQuestionKey = null;
       attachedPhotos = [];
-      $('#photoPreviews').innerHTML = '';
-      $('#photoCount').style.display = 'none';
+      const previews = $('#photoPreviews');
+      if (previews) previews.innerHTML = '';
+      const count = $('#photoCount');
+      if (count) count.style.display = 'none';
       if ($('#choosePhotoBtn')) {
         $('#choosePhotoBtn').style.outline = 'none';
       }
       $('#resultCard').hidden = true;
+      $('#workCard').hidden = true;
+      $('#suggestCard').hidden = true;
       $('#startCard').hidden = false;
-      $('#observationText').value = '';
-      $('#lat').value = '';
-      $('#lng').value = '';
-      $('#geo').className = 'btn secondary';
-      $('#geo').textContent = 'Use my location';
+      const obsText = $('#observationText');
+      if (obsText) {
+        obsText.value = '';
+        obsText.style.borderColor = 'var(--border)';
+      }
+      const lat = $('#lat'); if (lat) lat.value = '';
+      const lng = $('#lng'); if (lng) lng.value = '';
+      const site = $('#site'); if (site) site.value = '';
+      const geo = $('#geo');
+      if (geo) {
+        geo.className = 'btn secondary';
+        geo.textContent = 'Use my location';
+        geo.title = '';
+      }
       updateStepIndicator(1);
     };
 

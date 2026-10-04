@@ -393,16 +393,20 @@
     }
     .toast {
       position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: var(--ink);
-      color: white;
+      bottom: 24px;
+      right: 24px;
+      background: #0b1f28;
+      color: #f1f9fa;
+      border: 1px solid rgba(255, 255, 255, 0.16);
       padding: 12px 18px;
       border-radius: 12px;
-      box-shadow: var(--shadow);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
       display: none;
       z-index: 1000;
       font-size: 14px;
+      font-weight: 500;
+      line-height: 1.4;
+      max-width: 420px;
     }
     #reviewer { display: none; }
     .statgrid {
@@ -475,6 +479,7 @@
       .answered-chip.active { background: #145049; color: #d6f9dd; }
       .other-input-container { background: #1c3641; border-color: var(--primary); }
       .photo-thumb { background: #17303a; }
+      .toast { background: #071720; color: #f1f9fa; border: 1px solid #284754; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6); }
     }
   </style>
 </head>
@@ -523,21 +528,15 @@
             <label for="observationText">Tell us what you noticed <span style="color:var(--expert)">*</span></label>
             <textarea id="observationText" placeholder="For example: the water looked clear, and both banks had plants." required></textarea>
             
-            <div class="row">
-              <div>
-                <label for="site">Site name (optional)</label>
-                <input id="site" placeholder="e.g. Greenway bend">
-              </div>
-              <div>
-                <label for="photo">Add photos (optional)</label>
-                <div class="photo-upload-area">
-                  <input id="photo" type="file" accept="image/jpeg,image/png,image/webp" multiple style="display:none">
-                  <button type="button" class="btn secondary small" style="width:100%" onclick="$('#photo').click()">
-                    Choose photos
-                  </button>
-                  <div id="photoPreviews" class="photo-previews"></div>
-                  <div id="photoCount" class="photo-badge" style="display:none"></div>
-                </div>
+            <div>
+              <label for="photo">Add photos <span style="color:var(--expert)">*</span></label>
+              <div class="photo-upload-area">
+                <input id="photo" type="file" accept="image/jpeg,image/png,image/webp" multiple style="display:none">
+                <button type="button" class="btn secondary small" id="choosePhotoBtn" style="width:100%" onclick="$('#photo').click()">
+                  Choose photos
+                </button>
+                <div id="photoPreviews" class="photo-previews"></div>
+                <div id="photoCount" class="photo-badge" style="display:none"></div>
               </div>
             </div>
 
@@ -795,6 +794,9 @@
       }
       renderPhotoPreviews();
       $('#photo').value = '';
+      if (attachedPhotos.length && $('#choosePhotoBtn')) {
+        $('#choosePhotoBtn').style.outline = 'none';
+      }
     };
 
     function renderPhotoPreviews() {
@@ -820,7 +822,7 @@
       renderPhotoPreviews();
     };
 
-    // Observation submit: description box MUST be filled or otherwise it won't proceed
+    // Observation submit: description box and photos MUST be provided to proceed
     $('#submit').onclick = async () => {
       const descInput = $('#observationText');
       const text = (descInput.value || '').trim();
@@ -832,6 +834,19 @@
       }
       descInput.style.borderColor = 'var(--border)';
 
+      if (!attachedPhotos.length) {
+        const chooseBtn = $('#choosePhotoBtn');
+        if (chooseBtn) {
+          chooseBtn.style.outline = '2px solid var(--expert)';
+          chooseBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        toast('Please add at least one photo before proceeding.');
+        return;
+      }
+      if ($('#choosePhotoBtn')) {
+        $('#choosePhotoBtn').style.outline = 'none';
+      }
+
       try {
         let lat = $('#lat').value, lng = $('#lng').value;
         let photoData = attachedPhotos.map(p => ({ name: p.name, size: p.size, type: p.type }));
@@ -839,7 +854,7 @@
           method: 'POST',
           body: JSON.stringify({
             text,
-            site_id: $('#site').value || 'Greenway Stream',
+            site_id: 'Greenway Stream',
             location: lat && lng ? { lat: +lat, lng: +lng } : null,
             recent_rain: $('#rain').checked,
             ai_mode: $('#aimode').value,
@@ -1220,6 +1235,9 @@
       attachedPhotos = [];
       $('#photoPreviews').innerHTML = '';
       $('#photoCount').style.display = 'none';
+      if ($('#choosePhotoBtn')) {
+        $('#choosePhotoBtn').style.outline = 'none';
+      }
       $('#resultCard').hidden = true;
       $('#startCard').hidden = false;
       $('#observationText').value = '';

@@ -899,7 +899,6 @@
           <div class="actions-row">
             <button class="btn primary" id="submit">Review my observation <span aria-hidden="true">→</span></button>
             <button class="btn secondary" id="geo">Use my location</button>
-            <button class="btn secondary" id="seed">Try the Greenway Stream demo</button>
           </div>
         </section>
 
@@ -1638,19 +1637,21 @@
       updateStepIndicator(1);
     };
 
-    // Greenway demo loader
-    $('#seed').onclick = async () => {
-      try {
-        let xs = await api('/seed', { method: 'POST' });
-        current = xs[0];
-        activeQuestionKey = current.question ? current.question.field : null;
-        $('#startCard').hidden = true;
-        await renderResult();
-        toast('Demo data loaded. Select a citizen in Researcher view.');
-      } catch (e) {
-        toast(e.message);
-      }
-    };
+    // Greenway demo loader (guarded)
+    if ($('#seed')) {
+      $('#seed').onclick = async () => {
+        try {
+          let xs = await api('/seed', { method: 'POST' });
+          current = xs[0];
+          activeQuestionKey = current.question ? current.question.field : null;
+          $('#startCard').hidden = true;
+          await renderResult();
+          toast('Demo data loaded. Select a citizen in Researcher view.');
+        } catch (e) {
+          toast(e.message);
+        }
+      };
+    }
 
     // Researcher dashboard
     async function loadResearch() {
